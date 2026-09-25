@@ -30,6 +30,68 @@
       </div>
     </div>
     <div class="header-actions">
+      <!-- Weather System Selector -->
+      <div class="weather-btn-wrapper">
+        <button class="btn btn-weather" id="btn-weather-toggle" title="Change Track Weather Condition" aria-expanded="false">
+          <span class="weather-icon" id="header-weather-icon">☀️</span>
+          <span id="header-weather-text">SUNNY</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <!-- Weather Selector Modal / Dropdown -->
+        <div class="weather-dropdown glass-panel" id="weather-dropdown" hidden>
+          <div class="weather-dropdown-header">
+            <h4>TRACK WEATHER SYSTEM</h4>
+            <span class="weather-status-tag" id="weather-track-condition">DRY TRACK</span>
+          </div>
+          <div class="weather-grid">
+            <button class="weather-card active" data-weather="sunny">
+              <span class="wc-icon">☀️</span>
+              <div class="wc-info">
+                <span class="wc-title">Sunny</span>
+                <span class="wc-desc">100% Grip • Optimal</span>
+              </div>
+              <span class="wc-temp">32°C</span>
+            </button>
+            <button class="weather-card" data-weather="cloudy">
+              <span class="wc-icon">☁️</span>
+              <div class="wc-info">
+                <span class="wc-title">Cloudy</span>
+                <span class="wc-desc">98% Grip • Overcast</span>
+              </div>
+              <span class="wc-temp">24°C</span>
+            </button>
+            <button class="weather-card" data-weather="rain">
+              <span class="wc-icon">🌧️</span>
+              <div class="wc-info">
+                <span class="wc-title">Rain</span>
+                <span class="wc-desc">60% Grip • Wet Visor</span>
+              </div>
+              <span class="wc-temp">19°C</span>
+            </button>
+            <button class="weather-card" data-weather="snow">
+              <span class="wc-icon">❄️</span>
+              <div class="wc-info">
+                <span class="wc-title">Snow</span>
+                <span class="wc-desc">35% Grip • Icy Slide</span>
+              </div>
+              <span class="wc-temp">-2°C</span>
+            </button>
+          </div>
+          <div class="weather-telemetry-preview">
+            <div class="wtp-item"><span>Air Temp</span><b id="wtp-air">32°C</b></div>
+            <div class="wtp-item"><span>Track Temp</span><b id="wtp-track">44°C</b></div>
+            <div class="wtp-item"><span>Rain Risk</span><b id="wtp-rain">0%</b></div>
+            <div class="wtp-item"><span>Grip Level</span><b id="wtp-grip" style="color:var(--neon-green)">100%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Mode Launcher Button -->
+      <button class="btn btn-start-race" id="btn-open-game-modes" title="Select Game Mode & Start Racing">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        <span>RACE MODES</span>
+      </button>
+
       <button class="btn btn-secondary" id="btn-copy-path" title="Copy raw SVG path d string">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         <span>Copy Path</span>
@@ -99,6 +161,8 @@
 
       <!-- Main SVG Canvas Stage -->
       <div class="svg-stage glass-panel" id="stage">
+        <!-- Weather Animation Layer Canvas -->
+        <canvas id="weather-canvas" class="weather-stage-canvas"></canvas>
         
         <!-- Quick Layer Switcher Floating Pill -->
         <div class="layer-pill">
@@ -109,6 +173,16 @@
           <button class="pill-btn active" data-layer="sectors" title="Toggle Sectors">Sectors</button>
           <button class="pill-btn active" data-layer="car" title="Toggle Car Simulation">Car</button>
         </div>
+
+        <!-- Floating Race Mode Launcher -->
+        <a href="Buddh%20Circuit%20%E2%80%93%20F1%20Cockpit.html" class="stage-race-cta" title="Launch F1 Cockpit 3D Game">
+          <span class="race-flag-icon">🏁</span>
+          <div class="race-cta-text">
+            <span class="race-cta-title">START RACE</span>
+            <span class="race-cta-sub">3D F1 Cockpit Simulator</span>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        </a>
 
         <!-- Compass North Marker -->
         <div class="stage-compass">
@@ -356,6 +430,39 @@
     <!-- Right Column: Turn Explorer & SVG Code Integrations -->
     <aside class="sidebar-section">
       
+      <!-- Live Meteorology & Weather Card -->
+      <div class="weather-sidebar-card glass-panel" id="weather-sidebar-card">
+        <div class="card-header-row">
+          <h3 class="panel-title">
+            <span class="panel-title-icon" id="sidebar-weather-icon">☀️</span>
+            <span>LIVE TRACK WEATHER</span>
+          </h3>
+          <span class="weather-condition-pill" id="sidebar-weather-pill">SUNNY • DRY</span>
+        </div>
+        <div class="weather-sidebar-grid">
+          <div class="weather-sidebar-stat">
+            <span class="ws-label">AIR TEMP</span>
+            <span class="ws-val" id="sidebar-air-temp">32°C</span>
+          </div>
+          <div class="weather-sidebar-stat">
+            <span class="ws-label">TRACK TEMP</span>
+            <span class="ws-val" id="sidebar-track-temp">44°C</span>
+          </div>
+          <div class="weather-sidebar-stat">
+            <span class="ws-label">PRECIPITATION</span>
+            <span class="ws-val" id="sidebar-precip">0%</span>
+          </div>
+          <div class="weather-sidebar-stat">
+            <span class="ws-label">GRIP COEFFICIENT</span>
+            <span class="ws-val font-mono" id="sidebar-grip" style="color:var(--neon-green)">1.00 <small>(100%)</small></span>
+          </div>
+        </div>
+        <div class="weather-tyre-rec" id="sidebar-tyre-rec">
+          <span class="tyre-icon">🔴</span>
+          <span>TYRE SELECTION: <b>SOFT SLICKS (DRY)</b></span>
+        </div>
+      </div>
+
       <!-- Track Stats Card -->
       <div class="stats-card glass-panel">
         <h3 class="panel-title">CIRCUIT SPECIFICATIONS</h3>
@@ -436,6 +543,64 @@
 
   <!-- Notification Toast -->
   <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <!-- Game Mode Selector Modal -->
+  <div class="modal-backdrop" id="game-mode-modal" hidden>
+    <div class="game-mode-dialog glass-panel">
+      <div class="dialog-header">
+        <div class="dialog-brand">
+          <span class="f1-badge-red">F1</span>
+          <h3>SELECT RACE MODE</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-game-modes" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <p class="dialog-subtitle">Choose your driving experience on Buddh International Circuit:</p>
+
+      <div class="game-mode-grid">
+        <!-- 1. Single Player -->
+        <a href="Buddh%20Circuit%20%E2%80%93%20F1%20Cockpit.html" class="mode-card">
+          <div class="mode-card-badge single-badge">SOLO</div>
+          <div class="mode-icon-wrap">🏎️</div>
+          <h4>Single Player</h4>
+          <p class="mode-desc">Cockpit View Time Trial, practice racing lines, DRS zones & sector pacing.</p>
+          <div class="mode-footer">
+            <span class="mode-tag">1 Driver</span>
+            <span class="mode-ctrl">Keyboard / WASD</span>
+            <span class="mode-btn-pill">START SOLO →</span>
+          </div>
+        </a>
+
+        <!-- 2. Duo Player (Split-Screen) -->
+        <a href="duo_race.html" class="mode-card featured">
+          <div class="mode-card-badge duo-badge">SPLIT-SCREEN</div>
+          <div class="mode-icon-wrap">👥</div>
+          <h4>Duo Player (1 Device)</h4>
+          <p class="mode-desc">2 separate screens side-by-side on the same device! Head-to-head live battle.</p>
+          <div class="mode-footer">
+            <span class="mode-tag">2 Drivers</span>
+            <span class="mode-ctrl">P1: W,A,S,D • P2: ▲,◄,▼,►</span>
+            <span class="mode-btn-pill">PLAY DUO →</span>
+          </div>
+        </a>
+
+        <!-- 3. Multiplayer (Online Rooms) -->
+        <a href="multiplayer_race.html" class="mode-card online-featured">
+          <div class="mode-card-badge multi-badge">ONLINE GP</div>
+          <div class="mode-icon-wrap">🌐</div>
+          <h4>Multiplayer (Rooms)</h4>
+          <p class="mode-desc">Create or join rooms with invite codes, race friends & celebrate Top 3 Podium winners (🥇🥈🥉)!</p>
+          <div class="mode-footer">
+            <span class="mode-tag">Top 3 Podium</span>
+            <span class="mode-ctrl">Room Code / WebRTC</span>
+            <span class="mode-btn-pill">ENTER LOBBY →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <script src="assets/js/app.js"></script>
 </body>

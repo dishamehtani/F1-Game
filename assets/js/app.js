@@ -511,9 +511,242 @@ document.getElementById("btn-download-detailed").addEventListener("click", () =>
   showToast("Downloading Full F1 Circuit SVG...");
 });
 
+// ==========================================================================
+// WEATHER SYSTEM ENGINE
+// ==========================================================================
+
+const WEATHER_CONFIGS = {
+  sunny: {
+    name: "SUNNY",
+    icon: "☀️",
+    airTemp: "32°C",
+    trackTemp: "44°C",
+    rainRisk: "0%",
+    gripText: "100%",
+    gripCoeff: "1.00",
+    gripColor: "var(--neon-green)",
+    statusTag: "DRY TRACK",
+    tyre: "SOFT SLICKS (DRY)",
+    tyreIcon: "🔴"
+  },
+  cloudy: {
+    name: "CLOUDY",
+    icon: "☁️",
+    airTemp: "24°C",
+    trackTemp: "29°C",
+    rainRisk: "15%",
+    gripText: "98%",
+    gripCoeff: "0.98",
+    gripColor: "var(--neon-green)",
+    statusTag: "OVERCAST",
+    tyre: "MEDIUM SLICKS",
+    tyreIcon: "🟡"
+  },
+  rain: {
+    name: "RAIN",
+    icon: "🌧️",
+    airTemp: "19°C",
+    trackTemp: "21°C",
+    rainRisk: "95%",
+    gripText: "60%",
+    gripCoeff: "0.60",
+    gripColor: "#00e5ff",
+    statusTag: "WET TRACK",
+    tyre: "FULL WETS (GROOVED)",
+    tyreIcon: "🔵"
+  },
+  snow: {
+    name: "SNOW",
+    icon: "❄️",
+    airTemp: "-2°C",
+    trackTemp: "0°C",
+    rainRisk: "85%",
+    gripText: "35%",
+    gripCoeff: "0.35",
+    gripColor: "#ff9100",
+    statusTag: "ICY BLIZZARD",
+    tyre: "STUDDED SNOW / ICE",
+    tyreIcon: "⚪"
+  }
+};
+
+let currentWeather = localStorage.getItem("f1_weather") || "sunny";
+
+function updateWeatherUI(type) {
+  currentWeather = type;
+  localStorage.setItem("f1_weather", type);
+  const cfg = WEATHER_CONFIGS[type] || WEATHER_CONFIGS.sunny;
+
+  // Update Header Button
+  const headerIcon = document.getElementById("header-weather-icon");
+  const headerText = document.getElementById("header-weather-text");
+  if (headerIcon) headerIcon.textContent = cfg.icon;
+  if (headerText) headerText.textContent = cfg.name;
+
+  // Update Dropdown Active state
+  document.querySelectorAll(".weather-card").forEach(card => {
+    card.classList.toggle("active", card.getAttribute("data-weather") === type);
+  });
+
+  // Update Dropdown preview
+  const wTrackCond = document.getElementById("weather-track-condition");
+  const wAir = document.getElementById("wtp-air");
+  const wTrack = document.getElementById("wtp-track");
+  const wRain = document.getElementById("wtp-rain");
+  const wGrip = document.getElementById("wtp-grip");
+  if (wTrackCond) wTrackCond.textContent = cfg.statusTag;
+  if (wAir) wAir.textContent = cfg.airTemp;
+  if (wTrack) wTrack.textContent = cfg.trackTemp;
+  if (wRain) wRain.textContent = cfg.rainRisk;
+  if (wGrip) {
+    wGrip.textContent = cfg.gripText;
+    wGrip.style.color = cfg.gripColor;
+  }
+
+  // Update Sidebar Card
+  const sIcon = document.getElementById("sidebar-weather-icon");
+  const sPill = document.getElementById("sidebar-weather-pill");
+  const sAir = document.getElementById("sidebar-air-temp");
+  const sTrack = document.getElementById("sidebar-track-temp");
+  const sPrecip = document.getElementById("sidebar-precip");
+  const sGrip = document.getElementById("sidebar-grip");
+  const sTyre = document.getElementById("sidebar-tyre-rec");
+
+  if (sIcon) sIcon.textContent = cfg.icon;
+  if (sPill) sPill.textContent = `${cfg.name} • ${cfg.statusTag}`;
+  if (sAir) sAir.textContent = cfg.airTemp;
+  if (sTrack) sTrack.textContent = cfg.trackTemp;
+  if (sPrecip) sPrecip.textContent = cfg.rainRisk;
+  if (sGrip) {
+    sGrip.innerHTML = `${cfg.gripCoeff} <small>(${cfg.gripText})</small>`;
+    sGrip.style.color = cfg.gripColor;
+  }
+  if (sTyre) {
+    sTyre.innerHTML = `<span class="tyre-icon">${cfg.tyreIcon}</span><span>TYRE SELECTION: <b>${cfg.tyre}</b></span>`;
+  }
+
+  // Update Start Race Links to pass weather parameter
+  const targetUrl = `Buddh Circuit – F1 Cockpit.html?weather=${encodeURIComponent(type)}`;
+  const btnStartHeader = document.getElementById("btn-start-race");
+  const stageRaceCta = document.querySelector(".stage-race-cta");
+  if (btnStartHeader) btnStartHeader.setAttribute("href", targetUrl);
+  if (stageRaceCta) stageRaceCta.setAttribute("href", targetUrl);
+}
+
+// Weather Dropdown Toggle
+const btnWeatherToggle = document.getElementById("btn-weather-toggle");
+const weatherDropdown = document.getElementById("weather-dropdown");
+
+if (btnWeatherToggle && weatherDropdown) {
+  btnWeatherToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isHidden = weatherDropdown.hidden;
+    weatherDropdown.hidden = !isHidden;
+    btnWeatherToggle.classList.toggle("active", isHidden);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!weatherDropdown.contains(e.target) && e.target !== btnWeatherToggle) {
+      weatherDropdown.hidden = true;
+      btnWeatherToggle.classList.remove("active");
+    }
+  });
+
+  document.querySelectorAll(".weather-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const w = card.getAttribute("data-weather");
+      updateWeatherUI(w);
+      showToast(`Track weather updated: ${w.toUpperCase()}`);
+    });
+  });
+}
+
+// Stage Weather Particles Animator
+const wCanvas = document.getElementById("weather-canvas");
+if (wCanvas) {
+  const wctx = wCanvas.getContext("2d");
+  let wWidth, wHeight;
+  const particles = [];
+
+  function resizeWeatherCanvas() {
+    wWidth = wCanvas.width = wCanvas.parentElement.clientWidth;
+    wHeight = wCanvas.height = wCanvas.parentElement.clientHeight;
+  }
+  window.addEventListener("resize", resizeWeatherCanvas);
+  resizeWeatherCanvas();
+
+  for (let i = 0; i < 70; i++) {
+    particles.push({
+      x: Math.random() * (wWidth || 800),
+      y: Math.random() * (wHeight || 600),
+      len: 12 + Math.random() * 16,
+      speed: 4 + Math.random() * 6,
+      size: 1.5 + Math.random() * 2.5,
+      drift: (Math.random() - 0.5) * 1.5
+    });
+  }
+
+  function renderWeatherStage() {
+    if (!wctx) return;
+    wctx.clearRect(0, 0, wWidth, wHeight);
+
+    if (currentWeather === "rain") {
+      wctx.strokeStyle = "rgba(0, 210, 255, 0.45)";
+      wctx.lineWidth = 1.2;
+      particles.forEach(p => {
+        p.y += p.speed * 2.2;
+        p.x += 1.5;
+        if (p.y > wHeight) { p.y = -20; p.x = Math.random() * wWidth; }
+        wctx.beginPath();
+        wctx.moveTo(p.x, p.y);
+        wctx.lineTo(p.x + 3, p.y + p.len);
+        wctx.stroke();
+      });
+    } else if (currentWeather === "snow") {
+      wctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+      particles.forEach(p => {
+        p.y += p.speed * 0.45;
+        p.x += Math.sin(p.y * 0.04) * 0.8 + p.drift;
+        if (p.y > wHeight) { p.y = -10; p.x = Math.random() * wWidth; }
+        wctx.beginPath();
+        wctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        wctx.fill();
+      });
+    }
+    requestAnimationFrame(renderWeatherStage);
+  }
+  renderWeatherStage();
+}
+
+// Game Mode Selection Modal Handler
+const btnOpenGameModes = document.getElementById("btn-open-game-modes");
+const gameModeModal = document.getElementById("game-mode-modal");
+const btnCloseGameModes = document.getElementById("btn-close-game-modes");
+
+if (btnOpenGameModes && gameModeModal) {
+  btnOpenGameModes.addEventListener("click", () => {
+    gameModeModal.removeAttribute("hidden");
+  });
+}
+
+if (btnCloseGameModes && gameModeModal) {
+  btnCloseGameModes.addEventListener("click", () => {
+    gameModeModal.setAttribute("hidden", "true");
+  });
+}
+
+if (gameModeModal) {
+  gameModeModal.addEventListener("click", (e) => {
+    if (e.target === gameModeModal) {
+      gameModeModal.setAttribute("hidden", "true");
+    }
+  });
+}
+
 // Start track
 window.addEventListener("DOMContentLoaded", () => {
   initTrack();
+  updateWeatherUI(currentWeather);
   // Auto-start simulation after 800ms
   setTimeout(startSimulation, 800);
 });

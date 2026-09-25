@@ -43,19 +43,23 @@ canvas{display:block;width:100%;height:100%}
 #lights span.on{background:var(--red);box-shadow:0 0 18px var(--red)}
 #msg{position:fixed;top:36%;left:0;right:0;text-align:center;font-size:30px;font-weight:700;pointer-events:none;text-shadow:0 2px 8px #000}
 #help{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--dim);line-height:1.6}
-#top-tools{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:12;display:flex;gap:8px}
-#top-tools button{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 13px;background:rgba(10,14,20,.84);color:#dbe3ec;font:700 11px "Chakra Petch",sans-serif;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 5px 20px rgba(0,0,0,.25)}
-#top-tools button:hover{background:rgba(32,39,49,.96);border-color:rgba(255,255,255,.36)}
+#top-tools{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:12;display:flex;align-items:center;gap:8px}
+#top-tools button, .tool-btn-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 14px;background:rgba(10,14,20,.84);color:#dbe3ec;font:700 11px "Chakra Petch",sans-serif;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 5px 20px rgba(0,0,0,.25);text-decoration:none;transition:all .15s ease}
+#top-tools button:hover, .tool-btn-link:hover{background:rgba(32,39,49,.96);border-color:rgba(255,255,255,.36);transform:translateY(-1px)}
+.tool-btn-link{color:#00d2be;border-color:rgba(0,210,190,0.3)}
+.tool-btn-link:hover{background:rgba(0,210,190,0.15);border-color:#00d2be;color:#ffffff}
 #sound-toggle::before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84}
 #sound-toggle[aria-pressed="false"]::before{background:#7a828d;box-shadow:none}
-#race-menu{position:fixed;z-index:11;top:calc(58px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(430px,calc(100vw - 28px));max-height:calc(100vh - 86px);overflow:auto;padding:20px;border:1px solid rgba(255,255,255,.16);border-radius:14px;background:linear-gradient(145deg,rgba(19,25,33,.97),rgba(7,10,14,.96));color:#f2f5f8;box-shadow:0 24px 80px rgba(0,0,0,.58);backdrop-filter:blur(16px)}
+#race-menu{position:fixed;z-index:20;top:calc(58px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(450px,calc(100vw - 28px));max-height:calc(100vh - 86px);overflow:auto;padding:22px;border:1px solid rgba(255,255,255,.18);border-radius:16px;background:linear-gradient(145deg,rgba(19,25,33,.98),rgba(8,11,16,.97));color:#f2f5f8;box-shadow:0 24px 80px rgba(0,0,0,.75),0 0 25px rgba(225,6,0,0.15);backdrop-filter:blur(20px)}
 #race-menu[hidden]{display:none}
 .menu-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
-.menu-heading h2{margin:0;font-size:20px;letter-spacing:.04em}
-.menu-heading p{margin:3px 0 0;color:#9aa6b4;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
-.menu-close{border:1px solid #39414c;border-radius:8px;background:#161b22;color:#dbe3ec;padding:6px 10px;font:700 11px "Chakra Petch",sans-serif;cursor:pointer}
+.menu-heading h2{margin:0;font-size:20px;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.menu-status-badge{display:inline-block;background:rgba(225,6,0,0.2);color:#ff4d4d;border:1px solid rgba(225,6,0,0.4);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:1px;text-transform:uppercase}
+.menu-heading p{margin:4px 0 0;color:#9aa6b4;font-size:11px;letter-spacing:.06em}
+.menu-close{border:1px solid #39414c;border-radius:8px;background:#161b22;color:#dbe3ec;padding:6px 12px;font:700 11px "Chakra Petch",sans-serif;cursor:pointer;transition:all .15s ease}
+.menu-close:hover{background:#262e3a;color:#fff}
 .menu-section{border-top:1px solid rgba(255,255,255,.1);padding-top:13px;margin-top:13px}
-.menu-section h3{margin:0 0 10px;color:#8d9aaa;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.menu-section h3{margin:0 0 10px;color:#8d9aaa;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
 .control-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .control-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;border-radius:8px;background:rgba(255,255,255,.045);font-size:12px;color:#c8d0d9}
 .keycaps{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
@@ -63,11 +67,21 @@ canvas{display:block;width:100%;height:100%}
 .setting-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px;margin:12px 0;color:#dbe3ec;font-size:12px}
 .setting-row output{color:#9eabb9;font-variant-numeric:tabular-nums}
 .setting-row input{grid-column:1/-1;width:100%;accent-color:#e10600}
-#resume-drive{width:100%;margin-top:15px;padding:11px;border:0;border-radius:8px;background:#e10600;color:#fff;font:700 13px "Chakra Petch",sans-serif;letter-spacing:.08em;cursor:pointer}
-#resume-drive:hover{background:#ff211b}
-#sound-toggle::before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84}
-#sound-toggle[aria-pressed="false"]::before{background:#7a828d;box-shadow:none}
-#sound-toggle:hover{background:rgba(32,39,49,.94);border-color:rgba(255,255,255,.36)}
+.menu-weather-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+.btn-weather-select{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#dbe3ec;cursor:pointer;font-family:"Chakra Petch",sans-serif;transition:all .15s ease;text-align:left}
+.btn-weather-select:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);transform:translateY(-1px)}
+.btn-weather-select.active{background:rgba(225,6,0,.24);border-color:#e10600;color:#fff;box-shadow:0 0 14px rgba(225,6,0,.45)}
+.btn-weather-select span{font-size:17px;line-height:1}
+.btn-weather-select b{font-size:13px;font-weight:700}
+.btn-weather-select small{font-size:10px;color:#9aa6b4}
+.menu-actions{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.btn-menu{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:0;border-radius:10px;font:700 13px "Chakra Petch",sans-serif;letter-spacing:.08em;cursor:pointer;text-decoration:none;transition:all .2s ease;box-sizing:border-box}
+.btn-menu-primary{background:linear-gradient(135deg, #ff1744, #e10600);color:#fff;box-shadow:0 4px 18px rgba(225,6,0,.45)}
+.btn-menu-primary:hover{background:linear-gradient(135deg, #ff2e58, #ff1744);box-shadow:0 6px 24px rgba(225,6,0,.7);transform:translateY(-1px)}
+.btn-menu-secondary{background:rgba(255,255,255,.08);color:#dbe3ec;border:1px solid rgba(255,255,255,.15)}
+.btn-menu-secondary:hover{background:rgba(255,255,255,.15);color:#fff}
+.btn-menu-exit{background:rgba(0,210,190,0.1);color:#00e5ff;border:1px solid rgba(0,210,190,0.35)}
+.btn-menu-exit:hover{background:rgba(0,210,190,0.22);border-color:#00e5ff;color:#fff;transform:translateY(-1px)}
 @media(max-width:700px){#help{display:none}#dash{gap:12px}}
 </style>
 </head>
@@ -100,34 +114,64 @@ canvas{display:block;width:100%;height:100%}
 <div id="lights"><span></span><span></span><span></span><span></span><span></span></div>
 <div id="msg"></div>
 <div id="top-tools">
-  <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="race-menu">MENU</button>
+  <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="race-menu" title="Pause Race & Open Settings">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    <span>SETTINGS &amp; PAUSE</span>
+  </button>
+  <button id="weather-toggle-btn" type="button" title="Cycle / Switch Track Weather (Sunny, Cloudy, Rain, Snow)">
+    <span id="game-weather-icon" style="margin-right:6px">☀️</span>
+    <span id="game-weather-text">SUNNY</span>
+  </button>
   <button id="sound-toggle" type="button" aria-pressed="true" title="Toggle engine and road audio">AUDIO ON</button>
+  <a href="index.html" class="tool-btn-link" id="top-exit-btn" title="Exit to Home Circuit Map">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>EXIT TO MAP</span>
+  </a>
 </div>
 <section id="race-menu" hidden aria-label="Race menu">
   <div class="menu-heading">
-    <div><h2>Race controls</h2><p id="menu-status">Paused · Buddh International Circuit</p></div>
-    <button class="menu-close" id="menu-close" type="button" aria-label="Close race menu">CLOSE</button>
+    <div>
+      <h2>SETTINGS &amp; PAUSE <span class="menu-status-badge" id="menu-status-badge">PAUSED</span></h2>
+      <p id="menu-status">Race paused · Buddh International Circuit</p>
+    </div>
+    <button class="menu-close" id="menu-close" type="button" aria-label="Close race menu">✕ CLOSE</button>
   </div>
+
   <div class="menu-section">
-    <h3>Drive</h3>
+    <h3>Driving Controls</h3>
     <div class="control-list">
       <div class="control-row"><span>Throttle</span><span class="keycaps"><span class="keycap">W</span><span class="keycap">↑</span></span></div>
       <div class="control-row"><span>Brake / reverse</span><span class="keycaps"><span class="keycap">S</span><span class="keycap">↓</span></span></div>
       <div class="control-row"><span>Steer</span><span class="keycaps"><span class="keycap">A</span><span class="keycap">D</span></span></div>
-      <div class="control-row"><span>DRS · straight only</span><span class="keycaps"><span class="keycap">SPACE</span></span></div>
-      <div class="control-row"><span>ERS boost</span><span class="keycaps"><span class="keycap">SHIFT</span></span></div>
-      <div class="control-row"><span>Restart lap</span><span class="keycaps"><span class="keycap">R</span></span></div>
-      <div class="control-row"><span>Map size</span><span class="keycaps"><span class="keycap">M</span></span></div>
-      <div class="control-row"><span>Menu / resume</span><span class="keycaps"><span class="keycap">ESC</span></span></div>
+      <div class="control-row"><span>DRS (Straights)</span><span class="keycaps"><span class="keycap">SPACE</span></span></div>
+      <div class="control-row"><span>ERS Boost</span><span class="keycaps"><span class="keycap">SHIFT</span></span></div>
+      <div class="control-row"><span>Restart Lap</span><span class="keycaps"><span class="keycap">R</span></span></div>
+      <div class="control-row"><span>Toggle Map</span><span class="keycaps"><span class="keycap">M</span></span></div>
+      <div class="control-row"><span>Pause / Menu</span><span class="keycaps"><span class="keycap">ESC</span><span class="keycap">P</span></span></div>
     </div>
   </div>
   <div class="menu-section">
-    <h3>Settings</h3>
+    <h3>Vehicle &amp; Audio Calibration</h3>
     <label class="setting-row" for="steer-setting"><span>Steering response</span><output id="steer-value">100%</output><input id="steer-setting" type="range" min="60" max="150" value="100"></label>
     <label class="setting-row" for="camera-setting"><span>Camera vibration</span><output id="camera-value">100%</output><input id="camera-setting" type="range" min="0" max="150" value="100"></label>
     <label class="setting-row" for="volume-setting"><span>Audio volume</span><output id="volume-value">75%</output><input id="volume-setting" type="range" min="0" max="100" value="75"></label>
   </div>
-  <button id="resume-drive" type="button">RESUME DRIVE</button>
+  <div class="menu-actions">
+    <button id="resume-drive" type="button" class="btn-menu btn-menu-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+      <span>RESUME CAR RACE</span>
+    </button>
+    <a href="duo_race.html" class="btn-menu btn-menu-secondary" style="color:var(--neon-green,#00d2be)">
+      <span>👥 SWITCH TO DUO SPLIT-SCREEN</span>
+    </a>
+    <a href="multiplayer_race.html" class="btn-menu btn-menu-secondary" style="color:var(--f1-gold,#ffd700)">
+      <span>🌐 SWITCH TO ONLINE MULTIPLAYER</span>
+    </a>
+    <a href="index.html" id="exit-home-btn" class="btn-menu btn-menu-exit">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>EXIT TO HOME MAP</span>
+    </a>
+  </div>
 </section>
 <div class="hud" id="dash">
   <div id="gear">N</div>
@@ -172,6 +216,59 @@ const car={x:0,y:0,a:0,vx:0,vy:0,steer:0,idx:0,ers:1,gear:0};
 let keys={},state='idle',t0=0,lapT=0,lapNo=1,best=null,last=null,halfway=false,lightsT=0,go=false,dist=0;
 let audioCtx=null,engineVoice=null,lastAudioGear=null,audioEnabled=true,volumeLevel=.75;
 let steeringSensitivity=1,cameraMotion=1,menuReturnState=null;
+
+// ---- Weather System & Particles ----
+let weather = (new URLSearchParams(window.location.search).get('weather') || localStorage.getItem('f1_weather') || 'sunny').toLowerCase();
+const WEATHER_NAMES = { sunny: 'SUNNY', cloudy: 'CLOUDY', rain: 'RAIN', snow: 'SNOW' };
+const WEATHER_ICONS = { sunny: '☀️', cloudy: '☁️', rain: '🌧️', snow: '❄️' };
+
+const rainParticles = [];
+for (let i = 0; i < 260; i++) {
+  rainParticles.push({
+    x: (Math.random() - 0.5) * 2200,
+    y: Math.random() * 900,
+    z: 2 + Math.random() * 90,
+    speed: 40 + Math.random() * 30,
+    len: 20 + Math.random() * 25
+  });
+}
+
+const windshieldDroplets = [];
+for (let i = 0; i < 60; i++) {
+  windshieldDroplets.push({
+    x: 0.1 + Math.random() * 0.8,
+    y: 0.15 + Math.random() * 0.7,
+    r: 1.5 + Math.random() * 3.5,
+    trail: Math.random() * 12,
+    speed: 0.04 + Math.random() * 0.12,
+    alpha: 0.35 + Math.random() * 0.45
+  });
+}
+
+const snowParticles = [];
+for (let i = 0; i < 240; i++) {
+  snowParticles.push({
+    x: (Math.random() - 0.5) * 1800,
+    y: (Math.random() - 0.5) * 1000,
+    z: 1 + Math.random() * 80,
+    speed: 10 + Math.random() * 18,
+    size: 2.2 + Math.random() * 3.8,
+    swirl: Math.random() * Math.PI * 2
+  });
+}
+
+function setGameWeather(w) {
+  weather = w;
+  localStorage.setItem('f1_weather', w);
+  const icon = WEATHER_ICONS[w] || '☀️';
+  const name = WEATHER_NAMES[w] || 'SUNNY';
+  const gIcon = $('game-weather-icon'), gText = $('game-weather-text');
+  if (gIcon) gIcon.textContent = icon;
+  if (gText) gText.textContent = name;
+  document.querySelectorAll('.btn-weather-select').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-game-weather') === w);
+  });
+}
 function startEngineAudio(){
   if(audioCtx){if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});return}
   const AudioContextClass=window.AudioContext||window.webkitAudioContext;
@@ -255,15 +352,52 @@ soundToggle.addEventListener('click',toggleAudio);
 addEventListener('keydown',e=>{if(e.code==='KeyV')toggleAudio()});
 const raceMenu=$('race-menu'),menuToggle=$('menu-toggle');
 function setMenuOpen(open){
-  if(open&&!menuReturnState){menuReturnState=state;state='paused';$('menu-status').textContent=go?'Paused · Buddh International Circuit':'Race ready · Buddh International Circuit'}
-  if(!open&&menuReturnState){state=menuReturnState;menuReturnState=null}
-  raceMenu.hidden=!open;menuToggle.setAttribute('aria-expanded',String(open));
+  if(open&&!menuReturnState){
+    menuReturnState=state;
+    state='paused';
+    $('menu-status').textContent=go?'Race paused · Buddh International Circuit':'Grid paused · Buddh International Circuit';
+    const b=$('menu-status-badge');if(b)b.textContent='PAUSED';
+  }
+  if(!open&&menuReturnState){
+    state=menuReturnState;
+    menuReturnState=null;
+  }
+  raceMenu.hidden=!open;
+  menuToggle.setAttribute('aria-expanded',String(open));
 }
 function toggleRaceMenu(){setMenuOpen(raceMenu.hidden)}
 menuToggle.addEventListener('click',toggleRaceMenu);
 $('menu-close').addEventListener('click',()=>setMenuOpen(false));
 $('resume-drive').addEventListener('click',()=>setMenuOpen(false));
-addEventListener('keydown',e=>{if(e.code==='Escape'){e.preventDefault();toggleRaceMenu()}});
+const restartBtn=$('restart-drive');
+if(restartBtn){
+  restartBtn.addEventListener('click',()=>{
+    setMenuOpen(false);
+    reset();
+  });
+}
+addEventListener('keydown',e=>{
+  if(e.code==='Escape'||e.code==='KeyP'){
+    e.preventDefault();
+    toggleRaceMenu();
+  }
+});
+const weatherToggleBtn = $('weather-toggle-btn');
+if (weatherToggleBtn) {
+  weatherToggleBtn.addEventListener('click', () => {
+    const list = ['sunny', 'cloudy', 'rain', 'snow'];
+    const next = list[(list.indexOf(weather) + 1) % list.length];
+    setGameWeather(next);
+  });
+}
+document.querySelectorAll('.btn-weather-select').forEach(b => {
+  b.addEventListener('click', () => {
+    const w = b.getAttribute('data-game-weather');
+    setGameWeather(w);
+  });
+});
+setGameWeather(weather);
+
 $('steer-setting').addEventListener('input',e=>{steeringSensitivity=Number(e.target.value)/100;$('steer-value').value=e.target.value+'%'});
 $('camera-setting').addEventListener('input',e=>{cameraMotion=Number(e.target.value)/100;$('camera-value').value=e.target.value+'%'});
 $('volume-setting').addEventListener('input',e=>{volumeLevel=Number(e.target.value)/100;$('volume-value').value=e.target.value+'%';if(engineVoice&&audioCtx)engineVoice.master.gain.setTargetAtTime(audioEnabled?0.12*volumeLevel:0.0001,audioCtx.currentTime,0.08)});
@@ -301,12 +435,41 @@ function update(dt){
   if(ersOn)car.ers=Math.max(0,car.ers-dt*0.22);else car.ers=Math.min(1,car.ers+dt*0.04+(brk?dt*0.1:0));
   const maxV=900+(drsOn?90:0)+(ersOn?50:0);
   if(thr)vf+=(760+(ersOn?350:0))*(1-Math.max(0,vf)/maxV)*dt;
-  if(brk){vf-=(vf>0?1900:500)*dt;if(vf<-120)vf=-120}
-  vf-=vf*(drsOn?0.05:0.13)*dt; // coasting drag
-  if(!onTrack)vf-=vf*(gravel?4:1.6)*dt;
-  vl*=Math.exp(-(onTrack?5.5:3)*dt);
-  const ar=Math.abs(vf);
-  car.a+=car.steer*2.6*steeringSensitivity*Math.min(ar/220,1)/(1+ar/620)*(vf>=0?1:-1)*dt;
+
+  // Weather physics adjustments
+  let lateralGripRate = onTrack ? 5.5 : 3.0;
+  let brakePower = 1900;
+  let steerCoeff = 2.6;
+
+  if (weather === 'cloudy') {
+    lateralGripRate = onTrack ? 5.2 : 2.8;
+    brakePower = 1850;
+  } else if (weather === 'rain') {
+    // Wet track: reduced lateral grip, longer braking, oversteer on acceleration
+    lateralGripRate = onTrack ? 3.2 : 1.6;
+    brakePower = 1300;
+    if (thr && Math.abs(car.steer) > 0.15 && vf > 30) {
+      vl += (car.steer > 0 ? 1 : -1) * 45 * dt;
+    }
+  } else if (weather === 'snow') {
+    // Snow / Ice: low friction, car slides & powerslides laterally!
+    lateralGripRate = onTrack ? 1.35 : 0.75;
+    brakePower = 850;
+    steerCoeff = 3.2; // responsive counter-steer
+    if (thr && Math.abs(car.steer) > 0.05) {
+      vl += (car.steer > 0 ? 1 : -1) * Math.min(vf * 0.45, 120) * dt;
+    }
+  }
+
+  if (brk) {
+    vf -= (vf > 0 ? brakePower : 500) * dt;
+    if (vf < -120) vf = -120;
+  }
+  vf -= vf * (drsOn ? 0.05 : 0.13) * dt; // coasting drag
+  if (!onTrack) vf -= vf * (gravel ? 4 : 1.6) * dt;
+  vl *= Math.exp(-lateralGripRate * dt);
+  const ar = Math.abs(vf);
+  car.a += car.steer * steerCoeff * steeringSensitivity * Math.min(ar / 220, 1) / (1 + ar / 620) * (vf >= 0 ? 1 : -1) * dt;
   const c2=Math.cos(car.a),s2=Math.sin(car.a);
   car.vx=vf*c2-vl*s2;car.vy=vf*s2+vl*c2; // keep world velocity from local comps (slip carries over)
   car.x+=car.vx*dt;car.y+=car.vy*dt;
@@ -1145,81 +1308,181 @@ function draw(){
   hor=H*0.42+Math.sin(T*70)*k*1.5*cameraMotion+(car.onTrack?0:Math.sin(T*90)*3*cameraMotion);
   const c=Math.cos(car.a),s=Math.sin(car.a);
   for(let i=0;i<N;i++){const dx=pts[i][0]-car.x,dy=pts[i][1]-car.y;cf[i]=dx*c+dy*s;cl[i]=-dx*s+dy*c;nf[i]=nrm[i][0]*c+nrm[i][1]*s;nl[i]=-nrm[i][0]*s+nrm[i][1]*c}
-  // sky + ground
-  const sg=ctx.createLinearGradient(0,0,0,hor);sg.addColorStop(0,'#3a78c8');sg.addColorStop(1,'#cfe4f2');
-  ctx.fillStyle=sg;ctx.fillRect(0,0,W,hor+1);
-  // Late-afternoon sun glow and drifting high clouds add depth to the horizon.
-  const sunX=W*0.78,sunY=hor*0.53,sunR=Math.min(W,H)*0.055;
-  const sunGlow=ctx.createRadialGradient(sunX,sunY,sunR*0.12,sunX,sunY,sunR*2.8);
-  sunGlow.addColorStop(0,'rgba(255,239,190,.42)');sunGlow.addColorStop(1,'rgba(255,239,190,0)');
-  ctx.fillStyle=sunGlow;ctx.fillRect(sunX-sunR*2.8,sunY-sunR*2.8,sunR*5.6,sunR*5.6);
-  ctx.fillStyle='rgba(255,246,218,.72)';ctx.beginPath();ctx.arc(sunX,sunY,sunR*.38,0,Math.PI*2);ctx.fill();
-  ctx.save();ctx.globalAlpha=.24;ctx.fillStyle='#fff';
-  for(let cloud=0;cloud<4;cloud++){
-    const cloudX=((cloud*.31+T*.003)%1.25-.12)*W,cloudY=hor*(.2+cloud*.12),cloudW=35+cloud*13;
-    ctx.beginPath();ctx.ellipse(cloudX,cloudY,cloudW,3+cloud,0,0,Math.PI*2);ctx.ellipse(cloudX+cloudW*.55,cloudY+1,cloudW*.58,2.5+cloud*.5,0,0,Math.PI*2);ctx.fill();
+  
+  // Dynamic Sky & Atmosphere according to Weather
+  const sg=ctx.createLinearGradient(0,0,0,hor);
+  if(weather==='rain'){
+    // Stormy dark navy gradient
+    sg.addColorStop(0,'#0a101d');
+    sg.addColorStop(0.6,'#1a2436');
+    sg.addColorStop(1,'#2c384e');
+  }else if(weather==='snow'){
+    // Frosty pale winter sky
+    sg.addColorStop(0,'#8cb7ea');
+    sg.addColorStop(0.6,'#cce1f8');
+    sg.addColorStop(1,'#edf4fc');
+  }else if(weather==='cloudy'){
+    // Desaturated overcast slate
+    sg.addColorStop(0,'#3f4c5e');
+    sg.addColorStop(0.7,'#6c7c91');
+    sg.addColorStop(1,'#95a4b8');
+  }else{
+    // Sunny azure blue
+    sg.addColorStop(0,'#3a78c8');
+    sg.addColorStop(1,'#cfe4f2');
   }
-  ctx.restore();
-  const ground=ctx.createLinearGradient(0,hor,0,H);ground.addColorStop(0,'#68834c');ground.addColorStop(.45,'#365f31');ground.addColorStop(1,'#17291d');
+  ctx.fillStyle=sg;ctx.fillRect(0,0,W,hor+1);
+
+  // Celestial bodies & Clouds according to Weather
+  if(weather==='sunny'){
+    const sunX=W*0.78,sunY=hor*0.53,sunR=Math.min(W,H)*0.055;
+    const sunGlow=ctx.createRadialGradient(sunX,sunY,sunR*0.12,sunX,sunY,sunR*2.8);
+    sunGlow.addColorStop(0,'rgba(255,239,190,.42)');sunGlow.addColorStop(1,'rgba(255,239,190,0)');
+    ctx.fillStyle=sunGlow;ctx.fillRect(sunX-sunR*2.8,sunY-sunR*2.8,sunR*5.6,sunR*5.6);
+    ctx.fillStyle='rgba(255,246,218,.72)';ctx.beginPath();ctx.arc(sunX,sunY,sunR*.38,0,Math.PI*2);ctx.fill();
+    ctx.save();ctx.globalAlpha=.24;ctx.fillStyle='#fff';
+    for(let cloud=0;cloud<4;cloud++){
+      const cloudX=((cloud*.31+T*.003)%1.25-.12)*W,cloudY=hor*(.2+cloud*.12),cloudW=35+cloud*13;
+      ctx.beginPath();ctx.ellipse(cloudX,cloudY,cloudW,3+cloud,0,0,Math.PI*2);ctx.ellipse(cloudX+cloudW*.55,cloudY+1,cloudW*.58,2.5+cloud*.5,0,0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+  }else if(weather==='snow'){
+    // Cold winter sun halo
+    const sunX=W*0.72,sunY=hor*0.48,sunR=Math.min(W,H)*0.06;
+    const snowSun=ctx.createRadialGradient(sunX,sunY,sunR*0.1,sunX,sunY,sunR*2.2);
+    snowSun.addColorStop(0,'rgba(255,255,255,0.4)');snowSun.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=snowSun;ctx.fillRect(sunX-sunR*2.2,sunY-sunR*2.2,sunR*4.4,sunR*4.4);
+  }else if(weather==='rain'){
+    // Occasional lightning flash across sky
+    if(Math.floor(T*12)%180===0){
+      ctx.fillStyle='rgba(180,220,255,0.28)';
+      ctx.fillRect(0,0,W,hor);
+    }
+    // Heavy dark rain clouds
+    ctx.save();ctx.globalAlpha=.38;ctx.fillStyle='#141c2b';
+    for(let cIdx=0;cIdx<5;cIdx++){
+      const cx=((cIdx*.28+T*.008)%1.3-.15)*W,cy=hor*(.15+cIdx*.1),cw=55+cIdx*25;
+      ctx.beginPath();ctx.ellipse(cx,cy,cw,8+cIdx*2,0,0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Dynamic Ground Terrain Gradient
+  const ground=ctx.createLinearGradient(0,hor,0,H);
+  if(weather==='snow'){
+    // Pure snowy blanket
+    ground.addColorStop(0,'#e5eef7');
+    ground.addColorStop(.45,'#cbdbe8');
+    ground.addColorStop(1,'#a8c0d6');
+  }else if(weather==='rain'){
+    // Wet dark muddy ground
+    ground.addColorStop(0,'#27372b');
+    ground.addColorStop(.45,'#18261c');
+    ground.addColorStop(1,'#0d160f');
+  }else if(weather==='cloudy'){
+    // Muted overcast grass
+    ground.addColorStop(0,'#4d643b');
+    ground.addColorStop(.45,'#2c4927');
+    ground.addColorStop(1,'#142217');
+  }else{
+    // Sunny rich grass
+    ground.addColorStop(0,'#68834c');
+    ground.addColorStop(.45,'#365f31');
+    ground.addColorStop(1,'#17291d');
+  }
   ctx.fillStyle=ground;ctx.fillRect(0,hor,W,H-hor);
+
   ctx.save();ctx.translate(W/2,H/2);ctx.rotate(-car.steer*k*0.05);ctx.translate(-W/2,-H/2);
+  
   // collect visible segments + trackside posts, draw far to near
   const items=[];
   for(let i=0;i<N;i++){const j=(i+1)%N,mx_=Math.max(cf[i],cf[j]),mn=Math.min(cf[i],cf[j]);
     if(mx_<NEAR||mn>FAR)continue;
     items.push([(cf[i]+cf[j])/2,i,0]);
     if(i%8===0&&cf[i]>NEAR){items.push([cf[i],i,-1]);items.push([cf[i],i,1])}
-    // Trackside scenery is anchored to track distance, so it moves naturally
-    // with the camera and remains consistent from lap to lap.
     if(i%28===0&&cf[i]>NEAR){
-      const side=(Math.floor(i/28)%2===0)?-1:1;
-      const buildingZones=[0.02,0.24,0.48,0.73,0.91];
       const progress=i/N;
+      const buildingZones=[0.02,0.24,0.48,0.73,0.91];
       const isBuilding=buildingZones.some(p=>Math.abs(progress-p)<0.018);
       items.push([cf[i],i,isBuilding?3:2]);
     }
   }
   items.sort((a,b)=>b[0]-a[0]);
   const HW=TW/2;
+
+  // Track & Scenery Colors per Weather
+  const isSnow = weather === 'snow';
+  const isRain = weather === 'rain';
+
   for(const [d,i,t] of items){
     if(t===0){
-      quad(i,-900,900,(i>>4)&1?'#2f5a2a':'#376633');
-      quad(i,-HW-90,HW+90,'#c9b98a');
-      const kc=(i>>1)&1?'#e10600':'#f2f2ee';
+      // Grass Run-off Quads
+      const grassCol = isSnow ? ((i>>4)&1?'#f1f5f9':'#e2e8f0') : (isRain ? ((i>>4)&1?'#172318':'#1c2a1e') : ((i>>4)&1?'#2f5a2a':'#376633'));
+      quad(i,-900,900,grassCol);
+
+      // Gravel Trap / Outer Run-off
+      const gravelCol = isSnow ? '#dbe4ee' : (isRain ? '#6d624a' : '#c9b98a');
+      quad(i,-HW-90,HW+90,gravelCol);
+
+      // Curbs (Red / White / Frosted)
+      const kc=(i>>1)&1?(isSnow?'#d32f2f':'#e10600'):(isSnow?'#ffffff':'#f2f2ee');
       quad(i,-HW-14,-HW,kc);quad(i,HW,HW+14,kc);
-      quad(i,-HW,HW,(i>>2)&1?'#3b3d40':'#404246');
+
+      // Main Asphalt Surface
+      let asphaltCol;
+      if(isSnow){
+        asphaltCol = (i>>2)&1?'#627387':'#6c7e94';
+      }else if(isRain){
+        asphaltCol = (i>>2)&1?'#191c22':'#1f232b';
+      }else{
+        asphaltCol = (i>>2)&1?'#3b3d40':'#404246';
+      }
+      quad(i,-HW,HW,asphaltCol);
+
+      // Start/Finish Line & Center Dashes
       if(i>=N-1||i===0)quad(i,-HW,HW,'#f2f2ee');
-      if(i%6<3)quad(i,-2,2,'#8c8f94');
+      if(i%6<3)quad(i,-2,2,isSnow?'#a4b4c7':(isRain?'#5c6370':'#8c8f94'));
     }else if(Math.abs(t)===1){
       const w=t*(HW+70),f=cf[i]+nf[i]*w,l=cl[i]+nl[i]*w;if(f<NEAR)continue;
       const x=W/2+l/f*focal,y=hor+CAMH/f*focal,h=34*focal/f,bw=7*focal/f;
-      ctx.fillStyle=(i/8|0)%2?'#e10600':'#f2f2ee';ctx.fillRect(x-bw/2,y-h,bw,h);
+      ctx.fillStyle=(i/8|0)%2?'#e10600':(isSnow?'#ffffff':'#f2f2ee');ctx.fillRect(x-bw/2,y-h,bw,h);
     }else{
       const side=((Math.floor(i/28)%2===0)?-1:1);
       const offset=side*(HW+185),f=cf[i]+nf[i]*offset,l=cl[i]+nl[i]*offset;
       if(f<NEAR)continue;
       const scale=focal/f,x=W/2+l/f*focal,base=hor+CAMH/f*focal;
       if(t===2){
-        // Layered broadleaf tree silhouettes with a slim trunk.
-        const h=Math.max(2,76*scale),w=Math.max(2,32*scale),ground=base;
-        ctx.fillStyle='#463b2a';ctx.fillRect(x-w*.09,ground-h*.42,w*.18,h*.42);
-        ctx.fillStyle='#173d24';ctx.beginPath();ctx.ellipse(x,ground-h*.63,w*.48,h*.40,0,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#24552d';ctx.beginPath();ctx.ellipse(x-w*.18,ground-h*.58,w*.30,h*.27,0,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='rgba(113,151,66,.38)';ctx.beginPath();ctx.ellipse(x+w*.12,ground-h*.75,w*.22,h*.13,0,0,Math.PI*2);ctx.fill();
+        // Trees with seasonal snow caps
+        const h=Math.max(2,76*scale),w=Math.max(2,32*scale),groundY=base;
+        ctx.fillStyle='#463b2a';ctx.fillRect(x-w*.09,groundY-h*.42,w*.18,h*.42);
+        ctx.fillStyle=isSnow?'#1a3d2c':'#173d24';ctx.beginPath();ctx.ellipse(x,groundY-h*.63,w*.48,h*.40,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle=isSnow?'#2b573a':'#24552d';ctx.beginPath();ctx.ellipse(x-w*.18,groundY-h*.58,w*.30,h*.27,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle=isSnow?'#f1f5f9':'rgba(113,151,66,.38)';ctx.beginPath();ctx.ellipse(x+w*.12,groundY-h*.75,w*.22,h*.13,0,0,Math.PI*2);ctx.fill();
+        if(isSnow){
+          // Snow cap on tree top
+          ctx.fillStyle='#ffffff';
+          ctx.beginPath();
+          ctx.ellipse(x,groundY-h*.78,w*.32,h*.12,0,0,Math.PI*2);
+          ctx.fill();
+        }
       }else{
-        // Low paddock / grandstand buildings sit beyond the runoff.
-        const h=Math.max(2,38*scale),w=Math.max(3,118*scale),ground=base;
-        ctx.fillStyle='#59605a';ctx.fillRect(x-w/2,ground-h,w,h);
-        ctx.fillStyle='#343a3a';ctx.beginPath();ctx.moveTo(x-w*.58,ground-h);ctx.lineTo(x-w*.42,ground-h*1.28);ctx.lineTo(x+w*.42,ground-h*1.28);ctx.lineTo(x+w*.58,ground-h);ctx.closePath();ctx.fill();
-        ctx.fillStyle='#89918b';ctx.fillRect(x-w*.38,ground-h*.83,w*.76,h*.12);
+        // Paddock & grandstands with snow on roofs
+        const h=Math.max(2,38*scale),w=Math.max(3,118*scale),groundY=base;
+        ctx.fillStyle='#59605a';ctx.fillRect(x-w/2,groundY-h,w,h);
+        ctx.fillStyle='#343a3a';ctx.beginPath();ctx.moveTo(x-w*.58,groundY-h);ctx.lineTo(x-w*.42,groundY-h*1.28);ctx.lineTo(x+w*.42,groundY-h*1.28);ctx.lineTo(x+w*.58,groundY-h);ctx.closePath();ctx.fill();
+        if(isSnow){
+          ctx.fillStyle='#ffffff';ctx.fillRect(x-w*.45,groundY-h*1.32,w*.9,h*.12);
+        }
+        ctx.fillStyle='#89918b';ctx.fillRect(x-w*.38,groundY-h*.83,w*.76,h*.12);
         ctx.fillStyle='#84a9ad';
-        for(let win=0;win<4;win++)ctx.fillRect(x-w*.38+win*w*.19,ground-h*.58,w*.11,h*.24);
-        ctx.fillStyle='#e10600';ctx.fillRect(x-w*.48,ground-h*.18,w*.96,Math.max(1,h*.06));
+        for(let win=0;win<4;win++)ctx.fillRect(x-w*.38+win*w*.19,groundY-h*.58,w*.11,h*.24);
+        ctx.fillStyle='#e10600';ctx.fillRect(x-w*.48,groundY-h*.18,w*.96,Math.max(1,h*.06));
       }
     }
   }
   ctx.restore();
-  // Fine edge streaks make high speed visible without obscuring the racing line.
+
+  // Fine edge speed streaks
   if(k>.32){
     ctx.save();ctx.globalAlpha=Math.min(.24,(k-.32)*.45);ctx.strokeStyle='#e7f3ff';ctx.lineWidth=1;
     for(let streak=0;streak<16;streak++){
@@ -1228,6 +1491,87 @@ function draw(){
       const len=(18+streak%5*9)*k;
       ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+side*len,y+len*.12);ctx.stroke();
     }
+    ctx.restore();
+  }
+
+  // ---- 3D WEATHER PARTICLES (Rain & Snow in World Space) ----
+  if(weather==='rain'){
+    ctx.save();
+    ctx.strokeStyle='rgba(190, 225, 255, 0.65)';
+    ctx.lineWidth=1.5;
+    const forwardSpeed = Math.max(20, car.vf||0);
+    rainParticles.forEach(p => {
+      p.y += p.speed + (forwardSpeed * 0.08);
+      p.x -= (car.steer||0) * 8;
+      if(p.y > H + 40){ p.y = -30; p.x = (Math.random() - 0.5) * W * 1.5 + W/2; }
+      const streakLen = p.len * (1 + forwardSpeed / 200);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + (car.steer * 4), p.y + streakLen);
+      ctx.stroke();
+    });
+    ctx.restore();
+  }else if(weather==='snow'){
+    ctx.save();
+    ctx.fillStyle='rgba(255, 255, 255, 0.85)';
+    const forwardSpeed = Math.max(10, car.vf||0);
+    snowParticles.forEach(p => {
+      p.y += p.speed * 0.35 + (forwardSpeed * 0.03);
+      p.x += Math.sin(T * 2 + p.swirl) * 1.4 - (car.steer||0) * 10;
+      if(p.y > H + 20){ p.y = -20; p.x = (Math.random() - 0.5) * W * 1.4 + W/2; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  car.rev=Math.max(0,Math.min(1,parseFloat($('rev').firstElementChild.style.width)/100||0));
+  cockpit();
+
+  // ---- WINDSHIELD / VISOR WEATHER EFFECTS (Foreground overlay) ----
+  if(weather==='rain'){
+    ctx.save();
+    const vfSpeed = Math.max(0, car.vf||0);
+    windshieldDroplets.forEach(d => {
+      // High speed pushes water droplets upwards and outwards on visor
+      const speedFactor = 0.0003 + (vfSpeed / 900) * 0.0025;
+      d.y -= d.speed * speedFactor;
+      d.x += (d.x > 0.5 ? 1 : -1) * speedFactor * 0.4;
+      if(d.y < 0.05 || d.x < 0.02 || d.x > 0.98){
+        d.y = 0.65 + Math.random() * 0.3;
+        d.x = 0.15 + Math.random() * 0.7;
+      }
+      const dx = d.x * W, dy = d.y * H;
+      // Droplet trail
+      if(vfSpeed > 100){
+        ctx.strokeStyle = `rgba(180, 220, 255, ${d.alpha * 0.35})`;
+        ctx.lineWidth = d.r * 0.8;
+        ctx.beginPath();
+        ctx.moveTo(dx, dy);
+        ctx.lineTo(dx, dy + d.trail * (vfSpeed / 200));
+        ctx.stroke();
+      }
+      // Water bead highlight
+      const beadGrad = ctx.createRadialGradient(dx - d.r*0.3, dy - d.r*0.3, d.r*0.1, dx, dy, d.r);
+      beadGrad.addColorStop(0, `rgba(255, 255, 255, ${d.alpha})`);
+      beadGrad.addColorStop(0.6, `rgba(140, 200, 255, ${d.alpha * 0.7})`);
+      beadGrad.addColorStop(1, 'rgba(30, 60, 100, 0)');
+      ctx.fillStyle = beadGrad;
+      ctx.beginPath();
+      ctx.arc(dx, dy, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+  }else if(weather==='snow'){
+    // Frosted visor vignette on edges
+    ctx.save();
+    const frostGrad = ctx.createRadialGradient(W/2, H/2, Math.min(W,H)*0.45, W/2, H/2, Math.max(W,H)*0.75);
+    frostGrad.addColorStop(0, 'rgba(230, 245, 255, 0)');
+    frostGrad.addColorStop(0.7, 'rgba(215, 235, 255, 0.18)');
+    frostGrad.addColorStop(1, 'rgba(240, 250, 255, 0.48)');
+    ctx.fillStyle = frostGrad;
+    ctx.fillRect(0, 0, W, H);
     ctx.restore();
   }
   car.rev=Math.max(0,Math.min(1,parseFloat($('rev').firstElementChild.style.width)/100||0));
