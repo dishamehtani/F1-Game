@@ -1525,30 +1525,79 @@ function gameLoop(timestamp){
     myCar.roll += (targetRoll - myCar.roll) * Math.min(1, 8 * dt);
   }
 
-  // 2. AI Competitor Bots Physics
+  // 2. AI Competitor Bots Physics — track-spline movement (can never go off-track)
   opponents.forEach(bot => {
     if(bot.isBot && raceActive && !bot.finished && go){
       bot.lapT += dt;
-      const targetSp = 680 * bot.speedOffset;
-      const curSp = Math.hypot(bot.vx, bot.vy);
-      const accel = (targetSp - curSp) * 1.5;
-      const ptNext = pts[(bot.idx + 3) % N];
-      const targetAng = Math.atan2(ptNext[1] - bot.y, ptNext[0] - bot.x);
 
-      bot.a += (targetAng - bot.a) * Math.min(1, 5 * dt);
-      const sp = curSp + accel * dt;
-      bot.vx = Math.cos(bot.a) * sp;
-      bot.vy = Math.sin(bot.a) * sp;
-      bot.x += bot.vx * dt;
-      bot.y += bot.vy * dt;
-      bot.kmh = sp * 0.37;
+      // Look ahead for corner curvature (average over next 20 pts)
+      if(!bot._curv){
+        // Build curvature cache once per bot (lazy)
+        bot._curv = new Float32Array(N);
+        for(let ci=0;ci<N;ci++){
+          const pa=pts[(ci+N-1)%N],pb=pts[ci],pc=pts[(ci+1)%N];
+          const v1x=pb[0]-pa[0],v1y=pb[1]-pa[1];
+          const v2x=pc[0]-pb[0],v2y=pc[1]-pb[1];
+          const cross=Math.abs(v1x*v2y-v1y*v2x);
+          bot._curv[ci]=cross/(Math.hypot(v1x,v1y)*Math.hypot(v2x,v2y)+0.001);
+        }
+        // Smooth it
+        const raw=bot._curv.slice();
+        for(let ci=0;ci<N;ci++){
+          let s=0;for(let k=-10;k<=10;k++)s+=raw[(ci+k+N)%N];
+          bot._curv[ci]=s/21;
+        }
+      }
 
-      const [nidx] = getNearestTrackIndex(bot.x, bot.y, bot.idx);
-      if(bot.idx > N * 0.85 && nidx < N * 0.15){
+      // Curvature-based speed: slow in corners, fast on straights
+      let lookahead=0;
+      for(let k=1;k<=20;k++) lookahead+=bot._curv[(bot.idx+k)%N];
+      lookahead/=20;
+      const straightFactor=Math.max(0.18, 1 - lookahead * 20);
+      const targetSp=(660 + bot.speedOffset * 200) * straightFactor;
+
+      // Smooth speed toward target
+      if(!bot._speed) bot._speed = targetSp * 0.5;
+      const diff = targetSp - bot._speed;
+      if(diff > 0) bot._speed += diff * Math.min(1, 2.5 * dt);
+      else         bot._speed += diff * Math.min(1, 4.0 * dt);
+      bot._speed = Math.max(30, bot._speed);
+      // Tiny natural jitter
+      bot._speed += Math.sin(bot.idx * 0.17 + bot.speedOffset * 50) * 2 * dt * 8;
+
+      // Move along track spline — guaranteed on-track
+      const prevIdx = bot.idx;
+      let travelLeft = bot._speed * dt;
+      while(travelLeft > 0){
+        const nx = (bot.idx + 1) % N;
+        const dx = pts[nx][0] - pts[bot.idx][0];
+        const dy = pts[nx][1] - pts[bot.idx][1];
+        const segLen = Math.hypot(dx, dy) || 1;
+        if(travelLeft >= segLen){
+          bot.idx = nx;
+          bot.x = pts[nx][0];
+          bot.y = pts[nx][1];
+          travelLeft -= segLen;
+        } else {
+          const frac = travelLeft / segLen;
+          bot.x = pts[bot.idx][0] + dx * frac;
+          bot.y = pts[bot.idx][1] + dy * frac;
+          travelLeft = 0;
+        }
+      }
+
+      // Update heading from track direction
+      const fwdIdx = (bot.idx + 1) % N;
+      bot.a = Math.atan2(pts[fwdIdx][1] - pts[bot.idx][1], pts[fwdIdx][0] - pts[bot.idx][0]);
+      bot.vx = Math.cos(bot.a) * bot._speed;
+      bot.vy = Math.sin(bot.a) * bot._speed;
+      bot.kmh = bot._speed * 0.37;
+
+      // Lap detection
+      if(prevIdx > N * 0.85 && bot.idx < N * 0.15){
         bot.lap++;
         if(bot.lap > totalLaps) bot.finished = true;
       }
-      bot.idx = nidx;
     }
   });
 
